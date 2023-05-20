@@ -36,4 +36,12 @@ public interface ClienteService {
      * @return True si es eliminado.
      */
     Boolean eliminarCliente(Integer clienteId);
+
+    /**
+     * Metodo de editar el estado del cliente por su id.
+     * @param clienteId Identifiacion del cliente.
+     * @param estadoCliente estado nuevo del cliente.
+     * @return Objeto de transferencia de datos editados del cliente.
+     */
+    ClienteDto editarEstadoCliente(Integer clienteId, Boolean estadoCliente);
 }

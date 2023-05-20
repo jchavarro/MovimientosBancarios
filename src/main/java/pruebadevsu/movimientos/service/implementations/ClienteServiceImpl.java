@@ -10,6 +10,7 @@ import pruebadevsu.movimientos.model.entities.ClienteEntity;
 import pruebadevsu.movimientos.model.entities.PersonaEntity;
 import pruebadevsu.movimientos.model.repositories.ClienteRepository;
 import pruebadevsu.movimientos.service.interfaces.ClienteService;
+import pruebadevsu.movimientos.service.utils.ClienteFactory;
 import pruebadevsu.movimientos.web.dto.ClienteDto;
 
 /**
@@ -24,7 +25,8 @@ public class ClienteServiceImpl implements ClienteService {
     /**
      * Permite la conversión de un objeto a otro que tenga atributos en común.
      */
-    private final ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    private ModelMapper modelMapper;
 
     /**
      * Repositorio de relación entre entidad de salud y usuario.
@@ -93,6 +95,26 @@ public class ClienteServiceImpl implements ClienteService {
         return Boolean.TRUE;
     }
 
+    /**
+     * Edicion del estado de cliente por su id.
+     * @param clienteId Identifiacion del cliente.
+     * @param estadoCliente estado nuevo del cliente.
+     * @return informacion del cliente editado.
+     */
+    @Override
+    public ClienteDto editarEstadoCliente(Integer clienteId, Boolean estadoCliente) {
+        log.info("Edicion del estado de cliente : " + clienteId);
+        ClienteEntity clienteEntidad = (ClienteEntity) clienteRepositorio.findById(clienteId)
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado el cliente."));
+        return modelMapper.map(clienteRepositorio
+                .save(ClienteFactory.editarEstadoClienteFactory(clienteEntidad, estadoCliente)), ClienteDto.class);
+    }
+
+    /**
+     * Validacion de campos importantes para el registro y actualización del cliente.
+     * @param clienteDto informacion del cliente.
+     * @return true si todos los campos estan llenos.
+     */
     private boolean validarCliente(final ClienteDto clienteDto) {
         return (!clienteDto.getIdentificacion().isEmpty() ||
                 !clienteDto.getNombre().isEmpty() ||

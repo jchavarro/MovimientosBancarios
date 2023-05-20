@@ -36,4 +36,9 @@ public class CuentaDto {
      * Deshabilitada = false
      */
     private Boolean estado;
+
+    /**
+     * Id de cliente correspondiente.
+     */
+    private Integer clienteId;
 }

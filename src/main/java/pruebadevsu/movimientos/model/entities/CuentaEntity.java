@@ -1,6 +1,7 @@
 package pruebadevsu.movimientos.model.entities;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "cuenta")
 public class CuentaEntity {
@@ -31,7 +33,6 @@ public class CuentaEntity {
      */
     @Id
     @Column(name = "numero_cuenta")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer numeroCuenta;
 
     /**

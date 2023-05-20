@@ -41,4 +41,9 @@ public class MovimientoDto {
      * Saldo en dolares despues del movimiento.
      */
     private Double saldo;
+
+    /**
+     * Id de cuenta correspondiente.
+     */
+    private Integer cuentaId;
 }
