@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pruebadevsu.movimientos.service.interfaces.CuentaService;
 import pruebadevsu.movimientos.web.dto.CuentaDto;
+import pruebadevsu.movimientos.web.dto.reponse.CuentaResponseDto;
 
 /**
  * Clase controlador para el objeto cuentas.
@@ -35,7 +36,7 @@ public class CuentaController {
      * @return Objeto de transferencia de datos de la cuenta.
      */
     @GetMapping()
-    public ResponseEntity<CuentaDto> obtenerCuenta (@RequestParam("numeroCuenta") final Integer numeroCuenta) {
+    public ResponseEntity<CuentaResponseDto> obtenerCuenta (@RequestParam("numeroCuenta") final Integer numeroCuenta) {
         return new ResponseEntity<>(cuentaService.obtenerCuentaPorId(numeroCuenta), HttpStatus.FOUND);
     }
 
@@ -45,7 +46,7 @@ public class CuentaController {
      * @return Objeto de transferencia de datos de la cuenta.
      */
     @PostMapping()
-    public ResponseEntity<CuentaDto> crearCuenta (@RequestBody final CuentaDto cuentaDto) {
+    public ResponseEntity<CuentaResponseDto> crearCuenta (@RequestBody final CuentaDto cuentaDto) {
         return new ResponseEntity<>(cuentaService.crearCuenta(cuentaDto), HttpStatus.CREATED);
     }
 

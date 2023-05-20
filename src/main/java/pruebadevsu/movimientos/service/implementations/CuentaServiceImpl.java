@@ -14,6 +14,7 @@ import pruebadevsu.movimientos.service.interfaces.CuentaService;
 import pruebadevsu.movimientos.service.utils.CuentaFactory;
 import pruebadevsu.movimientos.web.dto.ClienteDto;
 import pruebadevsu.movimientos.web.dto.CuentaDto;
+import pruebadevsu.movimientos.web.dto.reponse.CuentaResponseDto;
 
 import javax.swing.text.html.parser.Entity;
 
@@ -46,28 +47,32 @@ public class CuentaServiceImpl implements CuentaService {
 
     /**
      * Metodo get para obtener cuenta por su identificacion.
+     *
      * @param numeroCuenta identificacion de la cuenta.
      * @return Objeto de transferencia de datos de la cuenta.
      */
     @Override
-    public CuentaDto obtenerCuentaPorId(final Integer numeroCuenta) {
+    public CuentaResponseDto obtenerCuentaPorId(final Integer numeroCuenta) {
         log.info("Consulta de cuenta : " + numeroCuenta);
-        return modelMapper.map(cuentaRepositorio.findById(numeroCuenta)
-                .orElseThrow(() -> new NotFoundException("No se ha encontrado la cuenta.")), CuentaDto.class);
+        CuentaEntity cuentaEntity = cuentaRepositorio.findById(numeroCuenta)
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado la cuenta."));
+        return modelMapper.map(cuentaEntity, CuentaResponseDto.class);
     }
 
     /**
      * Metodo post para crear cuenta a partir del objeto cuenta.
+     *
      * @param cuentaDto Objeto cuenta con su informacion.
      * @return Objeto de transferencia de datos de la cuenta.
      */
     @Override
-    public CuentaDto crearCuenta(final CuentaDto cuentaDto) {
+    public CuentaResponseDto crearCuenta(final CuentaDto cuentaDto) {
         log.info("Creacion de cuenta " + cuentaDto.getNumeroCuenta());
         if (validarCuenta(cuentaDto)) {
-            return modelMapper.map(cuentaRepositorio.save(CuentaFactory
-                    .crearCuentaClienteEntity(cuentaDto, modelMapper.map(clienteService
-                            .obtenerClientePorId(cuentaDto.getClienteId()), ClienteEntity.class))), CuentaDto.class);
+            return modelMapper.map(cuentaRepositorio
+                            .save(CuentaFactory.crearCuentaClienteEntity(cuentaDto,
+                                    modelMapper.map(clienteService.obtenerClientePorId(cuentaDto.getClienteId()), ClienteEntity.class))),
+                    CuentaResponseDto.class);
         } else {
             throw new BadRequestException
                     ("El numero de cuenta, el tipo de cuenta, el cliente y el estado del cliente no pueden ser vacios");
@@ -76,6 +81,7 @@ public class CuentaServiceImpl implements CuentaService {
 
     /**
      * Metodo de actualizar la información completa del cuenta.
+     *
      * @param cuentaDto Objeto cuenta con su informacion.
      * @return Objeto de transferencia de datos de la cuenta.
      */
@@ -86,6 +92,7 @@ public class CuentaServiceImpl implements CuentaService {
 
     /**
      * Metodo de eliminar cuenta por su id.
+     *
      * @param numeroCuenta Identifiacion de la cuenta.
      * @return True si es eliminada.
      */
@@ -96,10 +103,11 @@ public class CuentaServiceImpl implements CuentaService {
 
     /**
      * Validacion de campos importantes para el registro y actualización de la cuenta.
+     *
      * @param cuentaDto informacion del cliente.
      * @return true si todos los campos estan llenos.
      */
-    private boolean validarCuenta(final CuentaDto cuentaDto ) {
+    private boolean validarCuenta(final CuentaDto cuentaDto) {
         return (cuentaDto.getEstado() != null ||
                 !cuentaDto.getTipoCuenta().isEmpty() ||
                 cuentaDto.getClienteId() != null ||

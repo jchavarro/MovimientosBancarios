@@ -1,6 +1,7 @@
 package pruebadevsu.movimientos.service.interfaces;
 
 import pruebadevsu.movimientos.web.dto.CuentaDto;
+import pruebadevsu.movimientos.web.dto.reponse.CuentaResponseDto;
 
 /**
  * Intefaz de servicio de cuenta.
@@ -14,14 +15,14 @@ public interface CuentaService {
      * @param numeroCuenta identificacion de la cuenta.
      * @return Objeto de transferencia de datos de la cuenta.
      */
-    CuentaDto obtenerCuentaPorId(Integer numeroCuenta);
+    CuentaResponseDto obtenerCuentaPorId(Integer numeroCuenta);
 
     /**
      * Metodo post para crear cuenta a partir del objeto cuenta.
      * @param cuentaDto Objeto cuenta con su informacion.
      * @return Objeto de transferencia de datos de la cuenta.
      */
-    CuentaDto crearCuenta(CuentaDto cuentaDto);
+    CuentaResponseDto crearCuenta(CuentaDto cuentaDto);
 
     /**
      * Metodo de actualizar la información completa del cuenta.
