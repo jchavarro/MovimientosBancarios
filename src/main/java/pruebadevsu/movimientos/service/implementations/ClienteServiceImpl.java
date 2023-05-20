@@ -10,6 +10,7 @@ import pruebadevsu.movimientos.model.entities.ClienteEntity;
 import pruebadevsu.movimientos.model.entities.PersonaEntity;
 import pruebadevsu.movimientos.model.repositories.ClienteRepository;
 import pruebadevsu.movimientos.service.interfaces.ClienteService;
+import pruebadevsu.movimientos.service.interfaces.adapter.ClienteServiceAdapter;
 import pruebadevsu.movimientos.service.utils.ClienteFactory;
 import pruebadevsu.movimientos.web.dto.ClienteDto;
 
@@ -20,7 +21,7 @@ import pruebadevsu.movimientos.web.dto.ClienteDto;
  */
 @Service
 @Slf4j
-public class ClienteServiceImpl implements ClienteService {
+public class ClienteServiceImpl implements ClienteService, ClienteServiceAdapter {
 
     /**
      * Permite la conversión de un objeto a otro que tenga atributos en común.
@@ -44,7 +45,7 @@ public class ClienteServiceImpl implements ClienteService {
     public ClienteDto obtenerClientePorId(final Integer clienteId) {
         log.info("Consulta de cliente : " + clienteId);
         return modelMapper.map(clienteRepositorio.findById(clienteId)
-                .orElseThrow(() -> new NotFoundException("No se ha encontrado el cliente.")), ClienteDto.class);
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado el cliente: " + clienteId)), ClienteDto.class);
     }
 
     /**
@@ -75,7 +76,7 @@ public class ClienteServiceImpl implements ClienteService {
     public ClienteDto actualizarCliente(final ClienteDto clienteDto) {
         log.info("Actualizacion de cliente : " + clienteDto.getNombre());
         clienteRepositorio.findById(clienteDto.getPersonaId())
-                .orElseThrow(() -> new NotFoundException("No se ha encontrado el cliente."));
+                .orElseThrow(() -> new NotFoundException("No se encontro el cliente."));
         return modelMapper.map(clienteRepositorio
                 .save(modelMapper.map(clienteDto, ClienteEntity.class)), ClienteDto.class);
     }
@@ -90,7 +91,7 @@ public class ClienteServiceImpl implements ClienteService {
     public Boolean eliminarCliente(final Integer clienteId) {
         log.info("Eliminacion de cliente : " + clienteId);
         PersonaEntity clienteEntidad = clienteRepositorio.findById(clienteId)
-                .orElseThrow(() -> new NotFoundException("No se ha encontrado el cliente."));
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado el cliente: " + clienteId));
         clienteRepositorio.deleteById(clienteEntidad.getPersonaId());
         return Boolean.TRUE;
     }
@@ -107,7 +108,14 @@ public class ClienteServiceImpl implements ClienteService {
         ClienteEntity clienteEntidad = (ClienteEntity) clienteRepositorio.findById(clienteId)
                 .orElseThrow(() -> new NotFoundException("No se ha encontrado el cliente."));
         return modelMapper.map(clienteRepositorio
-                .save(ClienteFactory.editarEstadoClienteFactory(clienteEntidad, estadoCliente)), ClienteDto.class);
+                .save(ClienteFactory.editarEstadoCliente(clienteEntidad, estadoCliente)), ClienteDto.class);
+    }
+
+    @Override
+    public ClienteEntity obtenerClienteEntityPorId(Integer clienteId) {
+        log.info("Consulta de cliente entidad: " + clienteId);
+        return (ClienteEntity) clienteRepositorio.findById(clienteId)
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado el cliente."));
     }
 
     /**

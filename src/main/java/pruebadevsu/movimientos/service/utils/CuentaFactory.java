@@ -2,7 +2,6 @@ package pruebadevsu.movimientos.service.utils;
 
 import pruebadevsu.movimientos.model.entities.ClienteEntity;
 import pruebadevsu.movimientos.model.entities.CuentaEntity;
-import pruebadevsu.movimientos.web.dto.ClienteDto;
 import pruebadevsu.movimientos.web.dto.CuentaDto;
 import pruebadevsu.movimientos.web.dto.reponse.CuentaResponseDto;
 
@@ -18,9 +17,9 @@ public final class CuentaFactory {
 
     /**
      * Creacion de cuenta a partir de la informacion de la cuenta y el cliente.
-     * @param cuentaDto
-     * @param clienteEntity
-     * @return
+     * @param cuentaDto Informacion de la cuenta.
+     * @param clienteEntity informacion del cliente.
+     * @return Cuenta con la informacion completa.
      */
     public static CuentaEntity crearCuentaClienteEntity(final CuentaDto cuentaDto, final ClienteEntity clienteEntity) {
         return CuentaEntity.builder()
@@ -30,5 +29,34 @@ public final class CuentaFactory {
                 .estado(cuentaDto.getEstado())
                 .clienteEntity(clienteEntity)
                 .build();
+    }
+
+    /**
+     * Creacion del response de cuenta con el nombre del cliente.
+     * @param cuentaEntity Cuenta.
+     * @param nombreCliente Nombre del cliente respectivo.
+     * @return objeto response con el nombre de cliente
+     */
+    public static CuentaResponseDto crearCuentaNomreClienteDto(final CuentaEntity cuentaEntity,
+                                                               final String nombreCliente) {
+        return CuentaResponseDto.builder()
+                .numeroCuenta(cuentaEntity.getNumeroCuenta())
+                .tipoCuenta(cuentaEntity.getTipoCuenta())
+                .saldoInicial(cuentaEntity.getSaldoInicial())
+                .estado(cuentaEntity.getEstado())
+                .nombreCliente(nombreCliente)
+                .build();
+    }
+
+    /**
+     * Cambiar estado a CuentaEntity.
+     *
+     * @param cuentaEntity entidad de cuenta a editar
+     * @param estadoCuenta nuevo estado a editar
+     * @return entidad de cuenta
+     */
+    public static CuentaEntity editarEstadoCuenta(CuentaEntity cuentaEntity, Boolean estadoCuenta) {
+        cuentaEntity.setEstado(estadoCuenta);
+        return cuentaEntity;
     }
 }

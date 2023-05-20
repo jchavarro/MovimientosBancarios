@@ -29,7 +29,7 @@ public interface CuentaService {
      * @param cuentaDto Objeto cuenta con su informacion.
      * @return Objeto de transferencia de datos de la cuenta.
      */
-    CuentaDto actualizarCuenta(CuentaDto cuentaDto);
+    CuentaResponseDto actualizarCuenta(CuentaDto cuentaDto);
 
     /**
      * Metodo de eliminar cuenta por su id.
@@ -37,4 +37,12 @@ public interface CuentaService {
      * @return True si es eliminada.
      */
     Boolean eliminarCuenta(Integer numeroCuenta);
+
+    /**
+     * Metodo de editar el estado de la cuenta por su numero de cuenta.
+     * @param numeroCuenta numero de la cuenta.
+     * @param estadoCuenta estado nuevo de la cuenta.
+     * @return Objeto de transferencia de datos editados de la cuenta.
+     */
+    CuentaResponseDto editarEstadoCliente(Integer numeroCuenta, Boolean estadoCuenta);
 }

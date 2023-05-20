@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pruebadevsu.movimientos.web.dto.ClienteDto;
 
 /**
  * Objeto de transferencia de datos de cuenta.
@@ -43,5 +42,5 @@ public class CuentaResponseDto {
     /**
      * Id de cliente correspondiente.
      */
-    private ClienteDto clienteDto;
+    private String nombreCliente;
 }

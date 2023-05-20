@@ -14,13 +14,13 @@ public final class ClienteFactory {
     }
 
     /**
-     * pasar un cambiar estado a clienteEntity.
+     * Cambiar estado a clienteEntity.
      *
      * @param clienteEntity entidad del cliente a editar
      * @param estadoNuevo nuevo estado a editar
      * @return entidad del cliente
      */
-    public static ClienteEntity editarEstadoClienteFactory(final ClienteEntity clienteEntity, final Boolean estadoNuevo) {
+    public static ClienteEntity editarEstadoCliente(final ClienteEntity clienteEntity, final Boolean estadoNuevo) {
         clienteEntity.setEstado(estadoNuevo);
         return clienteEntity;
     }
