@@ -1,6 +1,8 @@
 package pruebadevsu.movimientos.service.interfaces;
 
 import pruebadevsu.movimientos.web.dto.MovimientoDto;
+import pruebadevsu.movimientos.web.dto.reponse.MovimientoResponseDto;
+import pruebadevsu.movimientos.web.dto.request.MovimientoRequestDto;
 
 /**
  * Intefaz de servicio de movimiento.
@@ -21,7 +23,7 @@ public interface MovimientoService {
      * @param movimientoDto Objeto movimiento con su informacion.
      * @return Objeto de transferencia de datos del movimiento.
      */
-    MovimientoDto crearMovimiento(MovimientoDto movimientoDto);
+    MovimientoResponseDto crearMovimiento(MovimientoRequestDto movimientoDto);
 
     /**
      * Metodo de actualizar la información completa del cuenta.

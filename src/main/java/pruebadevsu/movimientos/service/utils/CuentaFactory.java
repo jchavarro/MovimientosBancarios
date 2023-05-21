@@ -37,8 +37,8 @@ public final class CuentaFactory {
      * @param nombreCliente Nombre del cliente respectivo.
      * @return objeto response con el nombre de cliente
      */
-    public static CuentaResponseDto crearCuentaNomreClienteDto(final CuentaEntity cuentaEntity,
-                                                               final String nombreCliente) {
+    public static CuentaResponseDto crearCuentaNombreClienteDto(final CuentaEntity cuentaEntity,
+                                                                final String nombreCliente) {
         return CuentaResponseDto.builder()
                 .numeroCuenta(cuentaEntity.getNumeroCuenta())
                 .tipoCuenta(cuentaEntity.getTipoCuenta())
@@ -55,8 +55,19 @@ public final class CuentaFactory {
      * @param estadoCuenta nuevo estado a editar
      * @return entidad de cuenta
      */
-    public static CuentaEntity editarEstadoCuenta(CuentaEntity cuentaEntity, Boolean estadoCuenta) {
+    public static CuentaEntity editarEstadoCuenta(final CuentaEntity cuentaEntity, final Boolean estadoCuenta) {
         cuentaEntity.setEstado(estadoCuenta);
+        return cuentaEntity;
+    }
+
+    /**
+     * Efectuar movimiento en cuenta.
+     * @param cuentaEntity cuenta a realizar el movimiento.
+     * @param valor valor del movimiento.
+     * @return entidad de cuenta.
+     */
+    public static CuentaEntity efectuarMoviemientoEnCuenta(final CuentaEntity cuentaEntity, final Double valor) {
+        cuentaEntity.setSaldoInicial(cuentaEntity.getSaldoInicial() + valor);
         return cuentaEntity;
     }
 }

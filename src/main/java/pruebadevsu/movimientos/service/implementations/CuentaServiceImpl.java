@@ -6,20 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pruebadevsu.movimientos.exceptions.BadRequestException;
 import pruebadevsu.movimientos.exceptions.NotFoundException;
+import pruebadevsu.movimientos.exceptions.UnprocessableEntityException;
 import pruebadevsu.movimientos.model.entities.ClienteEntity;
 import pruebadevsu.movimientos.model.entities.CuentaEntity;
-import pruebadevsu.movimientos.model.entities.PersonaEntity;
 import pruebadevsu.movimientos.model.repositories.CuentaRepository;
-import pruebadevsu.movimientos.service.interfaces.ClienteService;
 import pruebadevsu.movimientos.service.interfaces.CuentaService;
 import pruebadevsu.movimientos.service.interfaces.adapter.ClienteServiceAdapter;
-import pruebadevsu.movimientos.service.utils.ClienteFactory;
+import pruebadevsu.movimientos.service.interfaces.adapter.CuentaServiceAdapter;
 import pruebadevsu.movimientos.service.utils.CuentaFactory;
-import pruebadevsu.movimientos.web.dto.ClienteDto;
 import pruebadevsu.movimientos.web.dto.CuentaDto;
 import pruebadevsu.movimientos.web.dto.reponse.CuentaResponseDto;
-
-import javax.swing.text.html.parser.Entity;
 
 /**
  * Servicio para la cuenta.
@@ -28,7 +24,7 @@ import javax.swing.text.html.parser.Entity;
  */
 @Service
 @Slf4j
-public class CuentaServiceImpl implements CuentaService {
+public class CuentaServiceImpl implements CuentaService, CuentaServiceAdapter {
 
     /**
      * Permite la conversión de un objeto a otro.
@@ -59,7 +55,7 @@ public class CuentaServiceImpl implements CuentaService {
         log.info("Consulta de cuenta : " + numeroCuenta);
         CuentaEntity cuentaEntity = cuentaRepositorio.findById(numeroCuenta)
                 .orElseThrow(() -> new NotFoundException("No se encontró la cuenta: " + numeroCuenta));
-        return CuentaFactory.crearCuentaNomreClienteDto(cuentaEntity, cuentaEntity.getClienteEntity().getNombre());
+        return CuentaFactory.crearCuentaNombreClienteDto(cuentaEntity, cuentaEntity.getClienteEntity().getNombre());
     }
 
     /**
@@ -73,13 +69,12 @@ public class CuentaServiceImpl implements CuentaService {
         log.info("Creacion de cuenta " + cuentaDto.getNumeroCuenta());
         if (validarCuenta(cuentaDto)) {
             ClienteEntity clienteEntity = clienteServiceAdapter.obtenerClienteEntityPorId(cuentaDto.getClienteId());
-            return CuentaFactory.crearCuentaNomreClienteDto(cuentaRepositorio.save(
+            return CuentaFactory.crearCuentaNombreClienteDto(cuentaRepositorio.save(
                             CuentaFactory.crearCuentaClienteEntity(cuentaDto, clienteEntity)),
                     clienteEntity.getNombre());
-        } else {
-            throw new BadRequestException
+        } else throw new BadRequestException
                     ("El numero de cuenta, el tipo de cuenta, el cliente y el estado del cliente no pueden ser vacios");
-        }
+
     }
 
     /**
@@ -94,7 +89,7 @@ public class CuentaServiceImpl implements CuentaService {
         cuentaRepositorio.findById(cuentaDto.getNumeroCuenta())
                 .orElseThrow(() -> new NotFoundException("No se ha encontrado la cuenta"));
         ClienteEntity clienteEntity = clienteServiceAdapter.obtenerClienteEntityPorId(cuentaDto.getClienteId());
-        return CuentaFactory.crearCuentaNomreClienteDto(cuentaRepositorio.save(
+        return CuentaFactory.crearCuentaNombreClienteDto(cuentaRepositorio.save(
                         CuentaFactory.crearCuentaClienteEntity(cuentaDto, clienteEntity)),
                 clienteEntity.getNombre());
     }
@@ -109,7 +104,7 @@ public class CuentaServiceImpl implements CuentaService {
     public Boolean eliminarCuenta(final Integer numeroCuenta) {
         log.info("Eliminacion de cuenta : " + numeroCuenta);
         CuentaEntity cuentaEntity = cuentaRepositorio.findById(numeroCuenta)
-                .orElseThrow(() -> new NotFoundException("No se ha encontrado la cuenta: " + numeroCuenta));
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado cuenta: " + numeroCuenta));
         cuentaRepositorio.deleteById(cuentaEntity.getNumeroCuenta());
         return Boolean.TRUE;
     }
@@ -126,9 +121,41 @@ public class CuentaServiceImpl implements CuentaService {
         log.info("Edicion del estado de cuenta : " + numeroCuenta);
         CuentaEntity cuentaEntity = cuentaRepositorio.findById(numeroCuenta)
                 .orElseThrow(() -> new NotFoundException("No se ha encontrado la cuenta: " + numeroCuenta));
-        return CuentaFactory.crearCuentaNomreClienteDto(cuentaRepositorio
+        return CuentaFactory.crearCuentaNombreClienteDto(cuentaRepositorio
                         .save(CuentaFactory.editarEstadoCuenta(cuentaEntity, estadoCuenta)),
                 cuentaEntity.getClienteEntity().getNombre());
+    }
+
+    /**
+     * Obtiene cuenta por numero de cuenta.
+     * @param numeroCuenta id de la cuenta.
+     * @return informacion de la cuenta
+     */
+    @Override
+    public CuentaEntity obtenerCuentaEntityPorNumeroCuenta(Integer numeroCuenta) {
+        log.info("Consulta de cuenta entidad: " + numeroCuenta);
+        return cuentaRepositorio.findById(numeroCuenta)
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado la cuenta con numero: " + numeroCuenta));
+    }
+
+    /**
+     * Efectua el movimiento si tiene saldo en la cuenta suficiente.
+     * @param numeroCuenta numero de cuenta a aplicar el movimiento.
+     * @param valor valor del movimiento.
+     * @return CuentaEntity
+     */
+    @Override
+    public CuentaEntity efectuarMovimiento(Integer numeroCuenta, Double valor) {
+        log.info("Movimiento sobre cuenta : " + numeroCuenta + " con valor de: " + valor.toString());
+        CuentaEntity cuentaEntity = cuentaRepositorio.findById(numeroCuenta)
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado la cuenta: " + numeroCuenta));
+        if (valor < 0) {
+            if (cuentaEntity.getSaldoInicial() > valor) {
+                return cuentaRepositorio.save(CuentaFactory.efectuarMoviemientoEnCuenta(cuentaEntity, valor));
+            } else throw new UnprocessableEntityException("Saldo de la cuenta : " + numeroCuenta + " no disponible");
+        } else {
+            return cuentaRepositorio.save(CuentaFactory.efectuarMoviemientoEnCuenta(cuentaEntity, valor));
+        }
     }
 
     /**
@@ -143,4 +170,5 @@ public class CuentaServiceImpl implements CuentaService {
                 cuentaDto.getClienteId() != null ||
                 cuentaDto.getNumeroCuenta() != null);
     }
+
 }

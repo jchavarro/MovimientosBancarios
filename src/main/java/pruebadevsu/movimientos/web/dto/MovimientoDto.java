@@ -28,7 +28,7 @@ public class MovimientoDto {
 
     /**
      * Tipo del movimiento.
-     * Tipos: Ahorros y Corriente.
+     * Tipos: Retiro, deposito.
      */
     private String tipoMovimiento;
 
@@ -45,5 +45,5 @@ public class MovimientoDto {
     /**
      * Id de cuenta correspondiente.
      */
-    private Integer cuentaId;
+    private Integer numeroCuenta;
 }

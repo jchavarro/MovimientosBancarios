@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pruebadevsu.movimientos.service.interfaces.MovimientoService;
 import pruebadevsu.movimientos.web.dto.MovimientoDto;
+import pruebadevsu.movimientos.web.dto.reponse.MovimientoResponseDto;
+import pruebadevsu.movimientos.web.dto.request.MovimientoRequestDto;
 
 /**
  * Clase controlador para el objeto movimientos.
@@ -31,41 +33,46 @@ public class MovimientosController {
 
     /**
      * Metodo get para obtener movimiento por su identificacion.
+     *
      * @param movimientoId identificacion del movimiento.
      * @return Objeto de transferencia de datos del movimiento.
      */
     @GetMapping()
-    public ResponseEntity<MovimientoDto> obtenerMovimiento (@RequestParam("movimientoId") final Integer movimientoId) {
+    public ResponseEntity<MovimientoDto> obtenerMovimiento(@RequestParam("movimientoId") final Integer movimientoId) {
         return new ResponseEntity<>(movimientoService.obtenerMovimientoPorId(movimientoId), HttpStatus.FOUND);
     }
 
     /**
      * Metodo post para crear movimiento a partir del objeto movimiento.
+     *
      * @param movimientoDto Objeto movimiento con su informacion.
      * @return Objeto de transferencia de datos del movimiento.
      */
     @PostMapping()
-    public ResponseEntity<MovimientoDto> crearMovimiento (@RequestBody final MovimientoDto movimientoDto) {
+    public ResponseEntity<MovimientoResponseDto> crearMovimiento(
+            @RequestBody final MovimientoRequestDto movimientoDto) {
         return new ResponseEntity<>(movimientoService.crearMovimiento(movimientoDto), HttpStatus.CREATED);
     }
 
     /**
      * Metodo de actualizar la información completa del cuenta.
+     *
      * @param movimientoDto Objeto cuenta con su informacion.
      * @return Objeto de transferencia de datos de la cuenta.
      */
     @PutMapping()
-    public ResponseEntity<MovimientoDto> actualizarMovimiento (@RequestBody final MovimientoDto movimientoDto) {
+    public ResponseEntity<MovimientoDto> actualizarMovimiento(@RequestBody final MovimientoDto movimientoDto) {
         return new ResponseEntity<>(movimientoService.actualizarMovimiento(movimientoDto), HttpStatus.OK);
     }
 
     /**
      * Metodo de eliminar movimiento por su id.
+     *
      * @param movimientoId Identifiacion del movimiento.
      * @return True si es eliminado.
      */
     @DeleteMapping()
-    public ResponseEntity<Boolean> eliminarMovimiento (@RequestParam("movimientoId") final Integer movimientoId) {
+    public ResponseEntity<Boolean> eliminarMovimiento(@RequestParam("movimientoId") final Integer movimientoId) {
         return new ResponseEntity<>(movimientoService.eliminarMovimiento(movimientoId), HttpStatus.OK);
     }
 }

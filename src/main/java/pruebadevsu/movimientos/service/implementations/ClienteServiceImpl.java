@@ -111,6 +111,11 @@ public class ClienteServiceImpl implements ClienteService, ClienteServiceAdapter
                 .save(ClienteFactory.editarEstadoCliente(clienteEntidad, estadoCliente)), ClienteDto.class);
     }
 
+    /**
+     * Obtiene cliente entity por id.
+     * @param clienteId id del cliente.
+     * @return Cliente entity.
+     */
     @Override
     public ClienteEntity obtenerClienteEntityPorId(Integer clienteId) {
         log.info("Consulta de cliente entidad: " + clienteId);

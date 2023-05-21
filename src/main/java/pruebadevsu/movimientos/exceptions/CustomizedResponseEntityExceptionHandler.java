@@ -11,15 +11,25 @@ import java.util.Date;
 
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(HttpClientErrorException.BadRequest.class)
-    public final ResponseEntity<ExceptionResponse> handleBadRequestException(NotFoundException ex, WebRequest request) {
+    @ExceptionHandler(BadRequestException.class)
+    public final ResponseEntity<ExceptionResponse> handleBadRequestException(final NotFoundException ex,
+                                                                             final WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
                 request.getDescription(false), HttpStatus.BAD_REQUEST.getReasonPhrase());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public final ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException ex, WebRequest request) {
+    public final ResponseEntity<ExceptionResponse> handleNotFoundException(final NotFoundException ex,
+                                                                           final WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                request.getDescription(false), HttpStatus.BAD_REQUEST.getReasonPhrase());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnprocessableEntityException.class)
+    public final ResponseEntity<ExceptionResponse> handleUnprocessableEntityException(final NotFoundException ex,
+                                                                                      final WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
                 request.getDescription(false), HttpStatus.BAD_REQUEST.getReasonPhrase());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
