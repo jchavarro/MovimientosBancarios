@@ -3,6 +3,7 @@ package pruebadevsu.movimientos.service.interfaces;
 import pruebadevsu.movimientos.web.dto.ReporteDto;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Intefaz de servicio de reportes.
@@ -12,10 +13,12 @@ import java.util.Date;
 public interface ReporteService {
 
     /**
-     * Metodo get para obtener reportes de movimientos por fechas.
+     * Metodo para obtener reportes de movimientos por fechas.
+     *
+     * @param clienteId    id de cliente.
      * @param fechaInicial fecha inicial.
-     * @param fechaFinal fecha final.
+     * @param fechaFinal   fecha final.
      * @return Objeto de transferencia de datos del reporte.
      */
-    ReporteDto obtenerMovimientoPorFechas(Date fechaInicial, Date fechaFinal);
+    List<ReporteDto> obtenerMovimientoPorFechas(Integer clienteId, Date fechaInicial, Date fechaFinal);
 }

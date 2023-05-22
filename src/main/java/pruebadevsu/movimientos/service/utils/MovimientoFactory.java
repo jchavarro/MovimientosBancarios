@@ -2,6 +2,7 @@ package pruebadevsu.movimientos.service.utils;
 
 import pruebadevsu.movimientos.model.entities.CuentaEntity;
 import pruebadevsu.movimientos.model.entities.MovimientoEntity;
+import pruebadevsu.movimientos.web.dto.MovimientoDto;
 import pruebadevsu.movimientos.web.dto.reponse.MovimientoResponseDto;
 import pruebadevsu.movimientos.web.dto.request.MovimientoRequestDto;
 
@@ -20,21 +21,25 @@ public final class MovimientoFactory {
     /**
      * Crea movimiento con informacion de la cuente.
      * @param movimientoEntity entidad del movimiento
-     * @param cuentaEntity entidad de la cuenta
      * @return Objeto de transferencia de la cuenta
      */
-    public static MovimientoResponseDto crearMovimientoCuenta(final MovimientoEntity movimientoEntity,
-                                                       final CuentaEntity cuentaEntity) {
+    public static MovimientoResponseDto crearMovimientoCuenta(final MovimientoEntity movimientoEntity) {
         return MovimientoResponseDto.builder()
-                .numeroCuenta(cuentaEntity.getNumeroCuenta())
-                .tipoCuenta(cuentaEntity.getTipoCuenta())
-                .saldoInicial(cuentaEntity.getSaldoInicial())
-                .estado(cuentaEntity.getEstado())
+                .numeroCuenta(movimientoEntity.getCuentaEntity().getNumeroCuenta())
+                .tipoCuenta(movimientoEntity.getCuentaEntity().getTipoCuenta())
+                .saldoInicial(movimientoEntity.getSaldo())
+                .estado(movimientoEntity.getCuentaEntity().getEstado())
                 .movimientoDescipcion(movimientoEntity.getTipoMovimiento() + " de "
                         + Math.abs(movimientoEntity.getValor()))
                 .build();
     }
 
+    /**
+     * Creacion de la entidad de movimiento a partir del request de movimiento.
+     * @param movimientoDto Request de movimiento
+     * @param cuentaEntity Entidad de la cuenta.
+     * @return entidad del movimiento.
+     */
     public static MovimientoEntity crearMovimientoCuentaEntity(final MovimientoRequestDto movimientoDto,
                                                                final CuentaEntity cuentaEntity) {
         return MovimientoEntity.builder()
@@ -44,5 +49,35 @@ public final class MovimientoFactory {
                 .saldo(cuentaEntity.getSaldoInicial())
                 .cuentaEntity(cuentaEntity)
                 .build();
+    }
+
+    /**
+     * Creacion de la entidad de movimiento a partir del movimiento dto.
+     * Entrega informacion completa para la actualizacion del movimiento.
+     * @param movimientoDto Request de movimiento
+     * @param cuentaEntity Entidad de la cuenta.
+     * @return entidad del movimiento.
+     */
+    public static MovimientoEntity crearMovimientoCuentaEntity(final MovimientoDto movimientoDto,
+                                                               final CuentaEntity cuentaEntity) {
+        return MovimientoEntity.builder()
+                .movimientoId(movimientoDto.getMovimientoId())
+                .fecha(movimientoDto.getFecha())
+                .tipoMovimiento(movimientoDto.getTipoMovimiento())
+                .valor(movimientoDto.getValor())
+                .saldo(movimientoDto.getSaldo())
+                .cuentaEntity(cuentaEntity)
+                .build();
+    }
+
+    /**
+     * Edicion de movimiento en la fecha.
+     * @param movimientoEntity entidad del movimiento
+     * @param fecha fecha a modificar
+     * @return entidad del movimiento
+     */
+    public static MovimientoEntity editarFechaMovimientoEntity(MovimientoEntity movimientoEntity, Date fecha) {
+        movimientoEntity.setFecha(fecha);
+        return movimientoEntity;
     }
 }

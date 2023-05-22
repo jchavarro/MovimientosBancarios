@@ -11,6 +11,7 @@ import pruebadevsu.movimientos.service.interfaces.ReporteService;
 import pruebadevsu.movimientos.web.dto.ReporteDto;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Clase controlador para el objeto reportes.
@@ -29,14 +30,18 @@ public class ReportesControlador {
 
     /**
      * Metodo get para obtener reportes de movimientos por fechas.
+     *
+     * @param clienteId    id de cliente.
      * @param fechaInicial fecha inicial.
-     * @param fechaFinal fecha final.
+     * @param fechaFinal   fecha final.
      * @return Objeto de transferencia de datos del reporte.
      */
     @GetMapping()
-    public ResponseEntity<ReporteDto> obtenerMovimiento (@RequestParam("fechaInicial") final Date fechaInicial,
-                                                         @RequestParam("fechaFinal") final Date fechaFinal) {
-        return new ResponseEntity<>(reporteService.obtenerMovimientoPorFechas(fechaInicial, fechaFinal), HttpStatus.FOUND);
+    public ResponseEntity<List<ReporteDto>> obtenerMovimiento(@RequestParam("clienteId") final Integer clienteId,
+                                                              @RequestParam("fechaInicial") final Date fechaInicial,
+                                                              @RequestParam("fechaFinal") final Date fechaFinal) {
+        return new ResponseEntity<>(reporteService.obtenerMovimientoPorFechas(clienteId, fechaInicial, fechaFinal),
+                HttpStatus.FOUND);
     }
 
 }

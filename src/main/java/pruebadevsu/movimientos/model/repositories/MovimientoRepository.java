@@ -9,4 +9,6 @@ import java.util.List;
 public interface MovimientoRepository extends CrudRepository<MovimientoEntity, Integer> {
 
     List<MovimientoEntity> findAllByFechaBetween(final Date fechaInicio, final Date fechaFin);
+
+    List<MovimientoEntity> findAll();
 }

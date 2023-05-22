@@ -4,6 +4,8 @@ import pruebadevsu.movimientos.web.dto.MovimientoDto;
 import pruebadevsu.movimientos.web.dto.reponse.MovimientoResponseDto;
 import pruebadevsu.movimientos.web.dto.request.MovimientoRequestDto;
 
+import java.util.Date;
+
 /**
  * Intefaz de servicio de movimiento.
  *
@@ -16,7 +18,7 @@ public interface MovimientoService {
      * @param movimientoId identificacion del movimiento.
      * @return Objeto de transferencia de datos del movimiento.
      */
-    MovimientoDto obtenerMovimientoPorId(Integer movimientoId);
+    MovimientoResponseDto obtenerMovimientoPorId(Integer movimientoId);
 
     /**
      * Metodo post para crear movimiento a partir del objeto movimiento.
@@ -38,4 +40,13 @@ public interface MovimientoService {
      * @return True si es eliminado.
      */
     Boolean eliminarMovimiento(Integer movimientoId);
+
+    /**
+     * Metodo de editar la fecha de movivimieto por su numero de movimiento.
+     *
+     * @param movimientoId numero de movimiento.
+     * @param fecha estado nuevo de la cuenta.
+     * @return Objeto de transferencia de datos editados de la cuenta.
+     */
+    MovimientoDto editarMovimientoFecha(Integer movimientoId, Date fecha);
 }

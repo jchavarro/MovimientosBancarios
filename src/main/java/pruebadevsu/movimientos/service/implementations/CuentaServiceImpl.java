@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pruebadevsu.movimientos.exceptions.BadRequestException;
-import pruebadevsu.movimientos.exceptions.NotFoundException;
-import pruebadevsu.movimientos.exceptions.UnprocessableEntityException;
+import pruebadevsu.movimientos.exceptions.types.BadRequestException;
+import pruebadevsu.movimientos.exceptions.types.NotFoundException;
+import pruebadevsu.movimientos.exceptions.types.UnprocessableEntityException;
 import pruebadevsu.movimientos.model.entities.ClienteEntity;
 import pruebadevsu.movimientos.model.entities.CuentaEntity;
 import pruebadevsu.movimientos.model.repositories.CuentaRepository;
@@ -16,6 +16,11 @@ import pruebadevsu.movimientos.service.interfaces.adapter.CuentaServiceAdapter;
 import pruebadevsu.movimientos.service.utils.CuentaFactory;
 import pruebadevsu.movimientos.web.dto.CuentaDto;
 import pruebadevsu.movimientos.web.dto.reponse.CuentaResponseDto;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Servicio para la cuenta.
@@ -43,6 +48,9 @@ public class CuentaServiceImpl implements CuentaService, CuentaServiceAdapter {
      */
     @Autowired
     private ClienteServiceAdapter clienteServiceAdapter;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     /**
      * Metodo get para obtener cuenta por su identificacion.
@@ -147,6 +155,7 @@ public class CuentaServiceImpl implements CuentaService, CuentaServiceAdapter {
     @Override
     public CuentaEntity efectuarMovimiento(Integer numeroCuenta, Double valor) {
         log.info("Movimiento sobre cuenta : " + numeroCuenta + " con valor de: " + valor.toString());
+        entityManager.clear();
         CuentaEntity cuentaEntity = cuentaRepositorio.findById(numeroCuenta)
                 .orElseThrow(() -> new NotFoundException("No se ha encontrado la cuenta: " + numeroCuenta));
         if (valor < 0) {
@@ -156,6 +165,18 @@ public class CuentaServiceImpl implements CuentaService, CuentaServiceAdapter {
         } else {
             return cuentaRepositorio.save(CuentaFactory.efectuarMoviemientoEnCuenta(cuentaEntity, valor));
         }
+    }
+
+    /**
+     * Obtiene todas las cuentas por identificacion de cliente.
+     * @param clienteId identificador de cliente.
+     * @return lista de cuentas.
+     */
+    @Override
+    public List<CuentaEntity> obtenerCuentasPorCliente(Integer clienteId) {
+        return cuentaRepositorio.findAll()
+                .stream().filter(cuentaEntity -> cuentaEntity.getClienteEntity().getPersonaId().equals(clienteId))
+                .collect(Collectors.toList());
     }
 
     /**

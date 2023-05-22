@@ -1,10 +1,12 @@
 package pruebadevsu.movimientos.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,8 @@ import pruebadevsu.movimientos.service.interfaces.MovimientoService;
 import pruebadevsu.movimientos.web.dto.MovimientoDto;
 import pruebadevsu.movimientos.web.dto.reponse.MovimientoResponseDto;
 import pruebadevsu.movimientos.web.dto.request.MovimientoRequestDto;
+
+import java.util.Date;
 
 /**
  * Clase controlador para el objeto movimientos.
@@ -38,7 +42,8 @@ public class MovimientosController {
      * @return Objeto de transferencia de datos del movimiento.
      */
     @GetMapping()
-    public ResponseEntity<MovimientoDto> obtenerMovimiento(@RequestParam("movimientoId") final Integer movimientoId) {
+    public ResponseEntity<MovimientoResponseDto> obtenerMovimiento(
+            @RequestParam("movimientoId") final Integer movimientoId) {
         return new ResponseEntity<>(movimientoService.obtenerMovimientoPorId(movimientoId), HttpStatus.FOUND);
     }
 
@@ -75,4 +80,19 @@ public class MovimientosController {
     public ResponseEntity<Boolean> eliminarMovimiento(@RequestParam("movimientoId") final Integer movimientoId) {
         return new ResponseEntity<>(movimientoService.eliminarMovimiento(movimientoId), HttpStatus.OK);
     }
+
+    /**
+     * Metodo de editar la fecha de movivimieto por su numero de movimiento.
+     *
+     * @param movimientoId numero de movimiento.
+     * @param fecha estado nuevo de la cuenta.
+     * @return Objeto de transferencia de datos editados de la cuenta.
+     */
+    @PatchMapping("/fecha")
+    public ResponseEntity<MovimientoDto> editarMovimientoFecha(
+            @RequestParam("movimientoId") final Integer movimientoId,
+            @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final Date fecha) {
+        return new ResponseEntity<>(movimientoService.editarMovimientoFecha(movimientoId, fecha), HttpStatus.OK);
+    }
+
 }

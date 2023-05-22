@@ -2,6 +2,8 @@ package pruebadevsu.movimientos.service.interfaces.adapter;
 
 import pruebadevsu.movimientos.model.entities.CuentaEntity;
 
+import java.util.List;
+
 public interface CuentaServiceAdapter {
 
     /**
@@ -19,4 +21,10 @@ public interface CuentaServiceAdapter {
      */
     CuentaEntity efectuarMovimiento(Integer numeroCuenta, Double valor);
 
+    /**
+     * Obtiene todas las cuentas de un cliente.
+     * @param clienteId identificador de cliente.
+     * @return lista de cuentas.
+     */
+    List<CuentaEntity> obtenerCuentasPorCliente(Integer clienteId);
 }

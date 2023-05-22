@@ -19,7 +19,7 @@ public class MovimientoDto {
     /**
      * Llave primaria de la tabla.
      */
-    private Integer movimientosId;
+    private Integer movimientoId;
 
     /**
      * Fecha del movimiento.

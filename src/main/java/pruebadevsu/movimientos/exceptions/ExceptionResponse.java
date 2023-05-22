@@ -1,22 +1,39 @@
 package pruebadevsu.movimientos.exceptions;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+/**
+ * Clase modificada de la respuesta de excepcion.
+ *
+ * @author Juan Chavarro
+ */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExceptionResponse {
+
+    /**
+     * Hora y fecha de la excepcion.
+     */
     private Date timestamp;
+
+    /**
+     * Mensaje de la excepcion.
+     */
     private String mensaje;
+
+    /**
+     * Detalles de la excepcion.
+     */
     private String detalles;
+
+    /**
+     * Codigo http de la excepcion.
+     */
     private String httpCodeMessage;
 
-    public ExceptionResponse(Date timestamp, String message,
-                             String details,String httpCodeMessage) {
-        super();
-        this.timestamp = timestamp;
-        this.mensaje = message;
-        this.detalles = details;
-        this.httpCodeMessage=httpCodeMessage;
-    }
 }
