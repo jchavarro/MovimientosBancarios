@@ -77,8 +77,8 @@ public class ClienteController {
      * @return Objeto de transferencia de datos editados del cliente.
      */
     @PatchMapping("/estado")
-    public ResponseEntity<ClienteDto> editarEstadoCLiente (@RequestParam("clienteId") final Integer clienteId,
-                                                           @RequestParam("estadoCliente") final Boolean estadoCliente) {
+    public ResponseEntity<ClienteDto> editarEstadoCliente(@RequestParam("clienteId") final Integer clienteId,
+                                                          @RequestParam("estadoCliente") final Boolean estadoCliente) {
         return new ResponseEntity<>(clienteService.editarEstadoCliente(clienteId, estadoCliente), HttpStatus.OK);
     }
 

@@ -1,6 +1,5 @@
 package pruebadevsu.movimientos.model.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,6 @@ import javax.persistence.Table;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "cliente")
@@ -34,4 +32,15 @@ public class ClienteEntity extends PersonaEntity {
      */
     private Boolean estado;
 
+    public ClienteEntity(Integer personaId, String nombre, String genero, Integer edad, String identificacion,
+                         String direccion, String telefono, String password, Boolean estado) {
+        super(personaId, nombre, genero, edad, identificacion, direccion, telefono);
+        this.password = password;
+        this.estado = estado;
+    }
+
+    public ClienteEntity(String password, Boolean estado) {
+        this.password = password;
+        this.estado = estado;
+    }
 }

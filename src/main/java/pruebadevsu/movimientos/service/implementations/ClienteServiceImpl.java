@@ -1,5 +1,6 @@
 package pruebadevsu.movimientos.service.implementations;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import pruebadevsu.movimientos.web.dto.ClienteDto;
  * @author Juan Chavarro
  */
 @Service
+@AllArgsConstructor
 @Slf4j
 public class ClienteServiceImpl implements ClienteService, ClienteServiceAdapter {
 
@@ -45,7 +47,8 @@ public class ClienteServiceImpl implements ClienteService, ClienteServiceAdapter
     public ClienteDto obtenerClientePorId(final Integer clienteId) {
         log.info("Consulta de cliente : " + clienteId);
         return modelMapper.map(clienteRepositorio.findById(clienteId)
-                .orElseThrow(() -> new NotFoundException("No se ha encontrado el cliente: " + clienteId)), ClienteDto.class);
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado el cliente: " + clienteId)),
+                ClienteDto.class);
     }
 
     /**
@@ -128,7 +131,7 @@ public class ClienteServiceImpl implements ClienteService, ClienteServiceAdapter
      * @param clienteDto informacion del cliente.
      * @return true si todos los campos estan llenos.
      */
-    private boolean validarCliente(final ClienteDto clienteDto) {
+    public boolean validarCliente(final ClienteDto clienteDto) {
         return (!clienteDto.getIdentificacion().isEmpty() ||
                 !clienteDto.getNombre().isEmpty() ||
                 !clienteDto.getPassword().isEmpty());

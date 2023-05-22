@@ -1,5 +1,6 @@
 package pruebadevsu.movimientos.model.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,7 @@ import javax.persistence.Table;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "persona")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
